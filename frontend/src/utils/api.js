@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Check both potential environment variable names, fallback directly to Render production backend
+// Check environment variables first, fallback directly to live Render backend
 const API_BASE_URL = 
   import.meta.env.VITE_API_BASE_URL || 
   import.meta.env.VITE_API_URL || 
