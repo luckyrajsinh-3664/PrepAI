@@ -1,27 +1,19 @@
 import axios from 'axios';
 
-// Check environment variables first, fallback directly to live Render backend
-const API_BASE_URL = 
-  import.meta.env.VITE_API_BASE_URL || 
-  import.meta.env.VITE_API_URL || 
-  'https://prepai-backend-js10.onrender.com/api';
-
+// Directly point to your Render backend to eliminate localhost fallbacks
 const API = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: 'https://prepai-backend-js10.onrender.com/api',
 });
 
-// Safe request interceptor
 API.interceptors.request.use(
   (config) => {
     try {
-      // 1. First check direct token storage
       const token = localStorage.getItem('token');
       if (token && token !== 'undefined' && token !== 'null') {
         config.headers.Authorization = `Bearer ${token}`;
         return config;
       }
 
-      // 2. Fallback to check nested token inside user object
       const savedUser = localStorage.getItem('user');
       if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
         const user = JSON.parse(savedUser);
@@ -30,8 +22,7 @@ API.interceptors.request.use(
         }
       }
     } catch (error) {
-      console.error('Error parsing token from storage:', error);
-      // Clean up corrupt storage items
+      console.error('Error parsing token:', error);
       localStorage.removeItem('user');
       localStorage.removeItem('token');
     }
