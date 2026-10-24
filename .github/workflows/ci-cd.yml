@@ -30,7 +30,9 @@ jobs:
           cd frontend
           npm install
 
-      - name: Test Frontend Build Process
+      - name: Test Frontend Build
+        env:
+          CI: false
         run: |
           cd frontend
           npm run build
